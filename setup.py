@@ -24,7 +24,8 @@ setup(
     install_requires=[
         'argparse',
         'pycurl2',
-        'human_curl'
+        'human_curl',
+        #'numpy' # for measurement_utils.py
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
