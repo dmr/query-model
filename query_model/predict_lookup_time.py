@@ -46,16 +46,16 @@ def main():
         help="Parallelism of connection and hardware"
     )
     parser.add_argument("--connect_time",
-        default=.033, type=float,
+        default=default_connect_time, type=float,
         help="Time until connected. Default: .033s"
     )
     parser.add_argument("--processing_time",
-        default=.036, type=float,
+        default=default_processing_time, type=float,
         help=("Time of waiting for server response + "
             "time to transfer. Default: .036s")
     )
     parser.add_argument("--calculation_time",
-        default=.003, type=float,
+        default=default_calculation_time, type=float,
         help=("Calculation overhead. Default: .003s")
     )
     predict_lookup_time(**parser.parse_args().__dict__)
