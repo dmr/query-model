@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='query-model',
-    version='1.0.0',
+    version='1.0.1',
     url='https://github.com/dmr/query-model',
     license='MIT',
     author='Daniel Rech',
@@ -25,7 +25,7 @@ setup(
         'argparse',
         'pycurl2',
         'human_curl',
-        #'numpy' # for measurement_utils.py
+        'numpy'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

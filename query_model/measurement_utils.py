@@ -1,6 +1,44 @@
 from __future__ import print_function
+import datetime
+import os
+import pickle
 import time
 import numpy
+from functools import wraps
+
+
+def print_time_and_parameters(func):
+    @wraps(func)
+    def inner(*args, **kwargs):
+        b = time.time()
+        print(u">>> Running '{0}' with args {1} kwargs {2}".format(
+            func.__name__, args, kwargs))
+        ret = func(*args, **kwargs)
+        print(u">>> '{0}' took {1}".format(func.__name__, time.time() - b))
+        return ret
+    return inner
+
+
+def conf2strargs(dct, sep="="):
+    return [
+        u'{k}{sep}{v}'.format(k=k, v=v, sep=sep)
+        for k,v in dct.items()
+    ]
+
+
+def measure_and_save(fct, **kw):
+    file_name_prefix = u'{0}__{1}__{2}'.format(
+        fct.__name__,
+        u'__'.join(conf2strargs(kw, sep="_")),
+        datetime.datetime.strftime(datetime.datetime.now(),
+            '%Y%m%d-%H%M%S')
+    )
+    file_name_pickle = u'{0}.pickle'.format(file_name_prefix)
+    assert not os.path.exists(file_name_pickle)
+    measurement_ticks = fct(**kw)
+    with open(file_name_pickle, 'wb') as fp:
+        pickle.dump(measurement_ticks, fp)
+    return file_name_pickle
 
 
 def describe_measurements(measurements):
@@ -27,7 +65,9 @@ def repeat_measurement_and_describe(
         ):
     """ Repeats the measurement_fct call <repetitions> times and
     returns min, max, median, mean, sd. Repeats the call if accuracy
-    not met and returns most accurate result for many iterations
+    not met and returns most accurate result for many iterations.
+    measurement_fct requires to return a specific format. All query urls
+    implementations in query_urls.py support that format
     """
     def cleanup_res(res):
         res.update(**kwargs)
